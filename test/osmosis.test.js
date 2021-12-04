@@ -1,20 +1,15 @@
-const osmosisLib = require('../index');
+const osmosisLib = require('../index.ts')
 const {expect, assert} = require('chai');
 require("dotenv").config({path: `${__dirname}/.env`})
-/*
-invalid chain id
- */
+
 // variables
 const mainTimeout = 14000;
 const testData = {
-    toWalletAddress: process.env.TOWALLETADDRESS,
-    network: process.env.NETWORK,
-    keyStore: process.env.KEYSTORE,
-    password: process.env.PASSWORD,
-    amount: 0.00005
+    toWalletAddress:  process.env.TOWALLETADDRESS,
+    network:  process.env.NETWORK,
+    mnemonic: process.env.MNEMONIC,
+    amount: 5
 };
-
-if (!testData.keyStore || !testData.password) throw new Error('Invalid keyStore or password')
 
 const runtime = {};
 
@@ -80,8 +75,7 @@ describe("osmosis-mainet module", () => {
         this.timeout(mainTimeout * 3);
         const {
             toWalletAddress: to,
-            keyStore,
-            password,
+            mnemonic,
             network,
             amount
         } = testData;
@@ -90,7 +84,7 @@ describe("osmosis-mainet module", () => {
             to,
             amount,
             network,
-            keyStore, password
+            mnemonic,
         });
         assert.hasAllKeys(result.receipt, keys.sendTransaction);
         runtime.transactionHash = result.receipt.transactionHash;
@@ -101,7 +95,7 @@ describe("osmosis-mainet module", () => {
         const {
             network,
         } = testData;
-        const result = await elrondLib.getTransaction(runtime.transactionHash, network);
+        const result = await osmosisLib.getTransaction(runtime.transactionHash, network);
         assert.hasAllKeys(result.receipt, keys.getTransaction);
     });
 });
