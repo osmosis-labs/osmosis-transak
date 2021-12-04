@@ -5,6 +5,17 @@ import {
     BroadcastTxResponse,
 } from '@cosmjs/stargate';
 
+export type Network = {
+    provider: string,
+    transactionLink: (string) => string,
+    walletLink: (string) => string,
+    networkName: string,
+    bech32Prefix: string,
+    nativeDenom: string,
+    defaultTxFee: number,
+    defaultGas: number,
+};
+
 export type GetTransactionResult = {
     txData: IndexedTx,
     receipt: {
